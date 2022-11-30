@@ -10,7 +10,7 @@ const Header = (props) => {
 
 const Statistics = ({good, neutral, bad}) => {
 
-  if (total_reviews === 0) {
+  if (good + bad + neutral === 0) {
     return (
       <div>
         No feedback given
