@@ -1,5 +1,53 @@
 import { useState } from 'react'
 
+const Header = (props) => {
+  return (
+    <div>
+      <h1>{props.otsikot}</h1>
+    </div>
+  )
+}
+
+const Statistics = ({good, neutral, bad}) => {
+  const total_reviews = good+neutral+bad
+
+  if (total_reviews === 0) {
+    return (
+      <div>
+        No feedback given
+      </div>
+    )
+  }
+
+  const avg = (good-bad)/total_reviews
+  const pos = (good/total_reviews)*100
+
+  return (
+    <table>
+      <tbody>
+        <StatisticLine text="good" value={good}/>
+        <StatisticLine text="neutral" value={neutral}/>
+        <StatisticLine text="bad" value={bad}/>
+        <StatisticLine text="all" value={good + bad + neutral}/>
+        <StatisticLine text="average" value={(good - bad) / (good + bad + neutral)}/>
+        <StatisticLine text="positive" value={(good / (good + bad + neutral)) * 100 + '%'}/>
+      </tbody>
+    </table>
+  )
+}
+
+const StatisticLine = ({text,value}) => {
+  return (
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
+  )
+}
+
+const Button = ({handleClick, text}) => (<button onClick={handleClick}>{text}</button>)
+
+
 const App = () => {
 
   const otsikot = {
@@ -10,29 +58,18 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
+  const HandleGood = () => {setGood(good+1)}
+  const HandleNeutral = () => {setNeutral(neutral+1)}
+  const HandleBad = () => {setBad(bad+1)}
+
   return (
     <div>
       <Header otsikot={otsikot.feed} />
-      <button onClick={() => setGood(good + 1)}> good </button>
-      <button onClick={() => setNeutral(neutral + 1)}> neutral </button>
-      <button onClick={() => setBad(bad + 1)}> bad </button>
+      <Button handleClick={HandleGood} text="Good"/>
+      <Button handleClick={HandleNeutral} text="Neutral"/>
+      <Button handleClick={HandleBad} text="Bad"/>
       <Header otsikot={otsikot.sta} />
-
-      <tr> good {good} </tr>
-      <tr> neutral {neutral} </tr>
-      <tr> bad {bad} </tr>
-      <tr> all {good + bad + neutral} </tr>
-      <tr> average {(good - bad) / (good + bad + neutral)} </tr>
-      <tr> positive {(good / (good + bad + neutral)) * 100} % </tr>
-
-    </div>
-  )
-}
-
-const Header = (props) => {
-  return (
-    <div>
-      <h1>{props.otsikot}</h1>
+      <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   )
 }
