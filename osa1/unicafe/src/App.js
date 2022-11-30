@@ -9,7 +9,6 @@ const Header = (props) => {
 }
 
 const Statistics = ({good, neutral, bad}) => {
-  const total_reviews = good+neutral+bad
 
   if (total_reviews === 0) {
     return (
@@ -18,9 +17,6 @@ const Statistics = ({good, neutral, bad}) => {
       </div>
     )
   }
-
-  const avg = (good-bad)/total_reviews
-  const pos = (good/total_reviews)*100
 
   return (
     <table>
