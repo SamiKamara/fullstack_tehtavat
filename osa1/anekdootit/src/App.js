@@ -12,12 +12,19 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [points, setPoints] = useState(new Uint8Array(anecdotes.length))
   const HandleNext = () => {setSelected(random(6))}
+  const Vote = () => {const copy = [...points]; copy[selected] += 1; setPoints(copy);}
+  const otsikot = { day: 'Anecdote of the day', most: 'Anecdote with most votes'}
 
   return (
     <div>
+      <Header otsikot={otsikot.day} />
       <Lines anecdotes={anecdotes} selected={selected} />
-      <Button handleClick={HandleNext} text="next anecdote"/>
+      <Button handleClick={Vote} text="vote"/>
+      <Button handleClick={HandleNext} text="next anecdote"/>  
+      <Header otsikot={otsikot.most} />  
+      <Lines anecdotes={anecdotes} selected={points.indexOf(Math.max(...points))} />
     </div>
   )
 }
@@ -29,6 +36,14 @@ const AnecdoteLine = ({text}) => {
     <tr>
       <td>{text}</td>
     </tr>
+  )
+}
+
+const Header = (props) => {
+  return (
+    <div>
+      <h1>{props.otsikot}</h1>
+    </div>
   )
 }
 
